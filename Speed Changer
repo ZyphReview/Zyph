@@ -141,6 +141,7 @@ Close.MouseButton1Click:Connect(function()
     end)
 end)
 end)
+end
 
 local UserInputService = game:GetService("UserInputService")
 UserInputService.InputBegan:Connect(function(input, gameProcessed)
@@ -175,3 +176,4 @@ Open.MouseButton1Click:Connect(function()
     Open.Visible = false
     Frame.Visible = true
 end)
+
