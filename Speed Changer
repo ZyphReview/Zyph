@@ -93,7 +93,11 @@ Open.TextWrapped = true
 local lastSpeed = 16
 
 game.Players.LocalPlayer.CharacterAdded:Connect(function(character)
-    local player = game.Players.LocalPlayer
+    local player = game:GetService("Players").LocalPlayer
+while not player do
+    wait()
+    player = game:GetService("Players").LocalPlayer
+end
     local storedSpeed = player:GetAttribute("SavedWalkSpeed") or lastSpeed
     player:SetAttribute("SavedWalkSpeed", storedSpeed)
     local humanoid = character:WaitForChild("Humanoid")
@@ -117,6 +121,7 @@ SpeedInput.FocusLost:Connect(function(enterPressed)
 end)
 
 Close.MouseButton1Click:Connect(function()
+    if not Frame or not Open then return end
     Frame.Visible = false
     Open.Visible = true
     
@@ -136,7 +141,6 @@ Close.MouseButton1Click:Connect(function()
     end)
 end
 
-
 local UserInputService = game:GetService("UserInputService")
 UserInputService.InputBegan:Connect(function(input, gameProcessed)
     if input.KeyCode == Enum.KeyCode.K and not gameProcessed then
@@ -146,7 +150,6 @@ UserInputService.InputBegan:Connect(function(input, gameProcessed)
 end)
     Frame.Visible = false
     Open.Visible = true
-    
     
     local HiddenText = Instance.new("TextLabel", ScreenGui)
     HiddenText.Size = UDim2.new(0, 300, 0, 30)
@@ -158,12 +161,11 @@ end)
     HiddenText.TextWrapped = true
     HiddenText.TextColor3 = Color3.fromRGB(255, 255, 255)
     
-   
     spawn(function()
         wait(5)
         HiddenText:Destroy()
     end)
-end)
+end
     Frame.Visible = false
     Open.Visible = true
 end)
