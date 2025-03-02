@@ -7,12 +7,12 @@ local Label = Instance.new("TextLabel")
 local Open = Instance.new("TextButton")
 
 local Players = game:GetService("Players")
-local UserInputService = game:GetService("UserInputService")
 local player = Players.LocalPlayer
 
 ScreenGui.Parent = game.CoreGui
 ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
+-- "Speed Changer Loaded" Message (only appears once)
 local LoadedText = Instance.new("TextLabel", ScreenGui)
 LoadedText.Size = UDim2.new(0, 300, 0, 30)
 LoadedText.Position = UDim2.new(0.5, -150, 1, -40)
@@ -31,7 +31,7 @@ task.spawn(function()
         end
         LoadedText.Visible = i % 2 == 0
     end
-    LoadedText:Destroy()
+    LoadedText:Destroy() -- Removes message after animation
 end)
 
 Frame.Parent = ScreenGui
@@ -54,6 +54,7 @@ SpeedInput.Text = "Enter Speed"
 SpeedInput.TextColor3 = Color3.fromRGB(0, 0, 0)
 SpeedInput.TextScaled = true
 SpeedInput.TextWrapped = true
+SpeedInput.ClearTextOnFocus = true -- Clears the text when clicked on mobile
 
 WalkSpeedControl.Parent = Frame
 WalkSpeedControl.Size = UDim2.new(0, 257, 0, 59)
@@ -97,8 +98,8 @@ local lastSpeed = 16
 player.CharacterAdded:Connect(function(character)
     local storedSpeed = player:GetAttribute("SavedWalkSpeed") or lastSpeed
     player:SetAttribute("SavedWalkSpeed", storedSpeed)
-    
-    local humanoid = character:WaitForChild("Humanoid", 5) -- Wait up to 5 seconds for the humanoid
+
+    local humanoid = character:WaitForChild("Humanoid", 5)
     if humanoid then
         humanoid.WalkSpeed = storedSpeed
     end
@@ -129,9 +130,3 @@ Open.MouseButton1Click:Connect(function()
     Frame.Visible = true
 end)
 
-UserInputService.InputBegan:Connect(function(input, gameProcessed)
-    if not gameProcessed and input.KeyCode == Enum.KeyCode.K then
-        Frame.Visible = not Frame.Visible
-        Open.Visible = not Frame.Visible
-    end
-end)
