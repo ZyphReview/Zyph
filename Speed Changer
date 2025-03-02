@@ -6,9 +6,12 @@ local Close = Instance.new("TextButton")
 local Label = Instance.new("TextLabel")
 local Open = Instance.new("TextButton")
 
+local Players = game:GetService("Players")
+local UserInputService = game:GetService("UserInputService")
+local player = Players.LocalPlayer
+
 ScreenGui.Parent = game.CoreGui
 ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-
 
 local LoadedText = Instance.new("TextLabel", ScreenGui)
 LoadedText.Size = UDim2.new(0, 300, 0, 30)
@@ -20,16 +23,16 @@ LoadedText.TextScaled = true
 LoadedText.TextWrapped = true
 LoadedText.TextColor3 = Color3.fromRGB(255, 0, 0) -- Default Red
 
-
-spawn(function()
+task.spawn(function()
     for i = 1, 40 do
         for hue = 0, 360, 10 do
             LoadedText.TextColor3 = Color3.fromHSV(hue / 360, 1, 1)
-            wait(0.1)
-        LoadedText.Visible = i % 2 == 0
+            task.wait(0.1)
         end
+        LoadedText.Visible = i % 2 == 0
     end
-    LoadedText:Destroy(end))
+    LoadedText:Destroy()
+end)
 
 Frame.Parent = ScreenGui
 Frame.BackgroundColor3 = Color3.fromRGB(148, 85, 27)
@@ -91,23 +94,20 @@ Open.TextWrapped = true
 
 local lastSpeed = 16
 
-game.Players.LocalPlayer.CharacterAdded:Connect(function(character)
-    local player = game:GetService("Players").LocalPlayer
-while not player do
-    wait()
-    player = game:GetService("Players").LocalPlayer
-end
+player.CharacterAdded:Connect(function(character)
     local storedSpeed = player:GetAttribute("SavedWalkSpeed") or lastSpeed
     player:SetAttribute("SavedWalkSpeed", storedSpeed)
-    local humanoid = character:WaitForChild("Humanoid")
-    humanoid.WalkSpeed = lastSpeed
+    
+    local humanoid = character:WaitForChild("Humanoid", 5) -- Wait up to 5 seconds for the humanoid
+    if humanoid then
+        humanoid.WalkSpeed = storedSpeed
+    end
 end)
 
 SpeedInput.FocusLost:Connect(function(enterPressed)
     if enterPressed then
         local speed = tonumber(SpeedInput.Text)
         if speed then
-            local player = game.Players.LocalPlayer
             local character = player.Character or player.CharacterAdded:Wait()
             local humanoid = character:FindFirstChildOfClass("Humanoid")
             if humanoid then
@@ -120,27 +120,6 @@ SpeedInput.FocusLost:Connect(function(enterPressed)
 end)
 
 Close.MouseButton1Click:Connect(function()
-    if not Frame or not Open then return end
-    Frame.Visible = false
-    Open.Visible = true
-
-    if not Frame or not Open then return end
-)
-end
-
-local UserInputService = game:GetService("UserInputService")
-UserInputService.InputBegan:Connect(function(input, gameProcessed)
-    if input.KeyCode == Enum.KeyCode.K and not gameProcessed then
-        Frame.Visible = not Frame.Visible
-        Open.Visible = not Frame.Visible
-    end
-    if input.KeyCode == Enum.KeyCode.K and not gameProcessed then
-        Frame.Visible = not Frame.Visible
-        Open.Visible = not Frame.Visible
-    end
-end)
-    )
-end
     Frame.Visible = false
     Open.Visible = true
 end)
@@ -148,4 +127,11 @@ end)
 Open.MouseButton1Click:Connect(function()
     Open.Visible = false
     Frame.Visible = true
+end)
+
+UserInputService.InputBegan:Connect(function(input, gameProcessed)
+    if not gameProcessed and input.KeyCode == Enum.KeyCode.K then
+        Frame.Visible = not Frame.Visible
+        Open.Visible = not Frame.Visible
+    end
 end)
