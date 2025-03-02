@@ -1,8 +1,6 @@
 local ScreenGui = Instance.new("ScreenGui")
 local Frame = Instance.new("Frame")
-local TextButton = Instance.new("TextButton")
-local TextLabel = Instance.new("TextLabel")
-local TextButton_2 = Instance.new("TextButton")
+local SpeedInput = Instance.new("TextBox")
 local WalkSpeedControl = Instance.new("TextLabel")
 local Close = Instance.new("TextButton")
 local Label = Instance.new("TextLabel")
@@ -21,37 +19,16 @@ Frame.Active = true
 Frame.Draggable = true
 Frame.Visible = false
 
-TextButton.Parent = Frame
-TextButton.BackgroundColor3 = Color3.fromRGB(79, 196, 55)
-TextButton.BorderSizePixel = 3
-TextButton.Position = UDim2.new(0.712, 0, 0.632, 0)
-TextButton.Size = UDim2.new(0, 74, 0, 73)
-TextButton.Font = Enum.Font.SourceSans
-TextButton.Text = "Plus"
-TextButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-TextButton.TextScaled = true
-TextButton.TextWrapped = true
-
-TextLabel.Parent = Frame
-TextLabel.BackgroundTransparency = 1.000
-TextLabel.Position = UDim2.new(0.330, 0, 0.294, 0)
-TextLabel.Size = UDim2.new(0, 87, 0, 70)
-TextLabel.Font = Enum.Font.SourceSans
-TextLabel.Text = "16"
-TextLabel.TextColor3 = Color3.fromRGB(69, 39, 18)
-TextLabel.TextScaled = true
-TextLabel.TextWrapped = true
-
-TextButton_2.Parent = Frame
-TextButton_2.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
-TextButton_2.BorderSizePixel = 3
-TextButton_2.Position = UDim2.new(0, 0, 0.632, 0)
-TextButton_2.Size = UDim2.new(0, 74, 0, 73)
-TextButton_2.Font = Enum.Font.SourceSans
-TextButton_2.Text = "Less"
-TextButton_2.TextColor3 = Color3.fromRGB(255, 255, 255)
-TextButton_2.TextScaled = true
-TextButton_2.TextWrapped = true
+SpeedInput.Parent = Frame
+SpeedInput.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+SpeedInput.BorderSizePixel = 3
+SpeedInput.Position = UDim2.new(0.2, 0, 0.5, 0)
+SpeedInput.Size = UDim2.new(0, 150, 0, 50)
+SpeedInput.Font = Enum.Font.SourceSans
+SpeedInput.Text = "Enter Speed"
+SpeedInput.TextColor3 = Color3.fromRGB(0, 0, 0)
+SpeedInput.TextScaled = true
+SpeedInput.TextWrapped = true
 
 WalkSpeedControl.Parent = Frame
 WalkSpeedControl.Size = UDim2.new(0, 257, 0, 59)
@@ -60,6 +37,15 @@ WalkSpeedControl.Text = "Speed Changer"
 WalkSpeedControl.TextColor3 = Color3.fromRGB(0, 0, 0)
 WalkSpeedControl.TextScaled = true
 WalkSpeedControl.TextWrapped = true
+
+Label.Parent = Frame
+Label.Size = UDim2.new(0, 257, 0, 30)
+Label.Position = UDim2.new(0, 0, 0.9, 0)
+Label.Font = Enum.Font.SourceSans
+Label.Text = "Follow Zyph on ScriptBlox"
+Label.TextColor3 = Color3.fromRGB(255, 255, 255)
+Label.TextScaled = true
+Label.TextWrapped = true
 
 Close.Parent = Frame
 Close.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
@@ -77,27 +63,39 @@ Open.Position = UDim2.new(0, 0, 0.52, 0)
 Open.Size = UDim2.new(0, 200, 0, 50)
 Open.Font = Enum.Font.SourceSans
 Open.Text = "Open Speed Changer"
-Open.TextColor3 = Color3.fromRGB(255, 255, 255)
+Open.TextColor3 = Color3.fromRGB(0, 0, 0)
 Open.TextScaled = true
 Open.TextWrapped = true
 
-local function modifySpeed(amount)
-    local player = game.Players.LocalPlayer
-    local character = player.Character or player.CharacterAdded:Wait()
-    local humanoid = character:FindFirstChildOfClass("Humanoid")
-    
-    if humanoid then
-        humanoid.WalkSpeed = math.max(0, humanoid.WalkSpeed + amount)
-        TextLabel.Text = tostring(humanoid.WalkSpeed)
-    end
-end
+local lastSpeed = 16
 
-TextButton.MouseButton1Click:Connect(function()
-    modifySpeed(5)
+game.Players.LocalPlayer.CharacterAdded:Connect(function(character)
+    local humanoid = character:WaitForChild("Humanoid")
+    humanoid.WalkSpeed = lastSpeed
 end)
 
-TextButton_2.MouseButton1Click:Connect(function()
-    modifySpeed(-5)
+SpeedInput.FocusLost:Connect(function(enterPressed)
+    if enterPressed then
+        local speed = tonumber(SpeedInput.Text)
+        if speed then
+            local player = game.Players.LocalPlayer
+            local character = player.Character or player.CharacterAdded:Wait()
+            local humanoid = character:FindFirstChildOfClass("Humanoid")
+            if humanoid then
+                humanoid.WalkSpeed = math.max(0, speed)
+                lastSpeed = humanoid.WalkSpeed
+            end
+        end
+    end
+        if speed then
+            local player = game.Players.LocalPlayer
+            local character = player.Character or player.CharacterAdded:Wait()
+            local humanoid = character:FindFirstChildOfClass("Humanoid")
+            if humanoid then
+                humanoid.WalkSpeed = math.max(0, speed)
+            end
+        end
+    end
 end)
 
 Close.MouseButton1Click:Connect(function()
@@ -109,3 +107,4 @@ Open.MouseButton1Click:Connect(function()
     Open.Visible = false
     Frame.Visible = true
 end)
+
