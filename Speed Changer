@@ -113,7 +113,7 @@ SpeedInput.FocusLost:Connect(function(enterPressed)
             local character = player.Character or player.CharacterAdded:Wait()
             local humanoid = character:FindFirstChildOfClass("Humanoid")
             if humanoid then
-                humanoid.WalkSpeed = math.max(0, speed)
+                humanoid.WalkSpeed = speed -- No speed limit
                 player:SetAttribute("SavedWalkSpeed", humanoid.WalkSpeed)
                 lastSpeed = humanoid.WalkSpeed
             end
