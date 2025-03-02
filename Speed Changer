@@ -120,7 +120,6 @@ Close.MouseButton1Click:Connect(function()
     Frame.Visible = false
     Open.Visible = true
     
-    
     local HiddenText = Instance.new("TextLabel", ScreenGui)
     HiddenText.Size = UDim2.new(0, 300, 0, 30)
     HiddenText.Position = UDim2.new(1, -320, 1, -40)
@@ -131,12 +130,11 @@ Close.MouseButton1Click:Connect(function()
     HiddenText.TextWrapped = true
     HiddenText.TextColor3 = Color3.fromRGB(255, 255, 255)
     
-    
     spawn(function()
         wait(5)
         HiddenText:Destroy()
     end)
-end)
+end
 
 
 local UserInputService = game:GetService("UserInputService")
