@@ -43,7 +43,7 @@ Label.Size = UDim2.new(0, 257, 0, 30)
 Label.Position = UDim2.new(0, 0, 0.9, 0)
 Label.Font = Enum.Font.SourceSans
 Label.Text = "Follow Zyph on ScriptBlox"
-Label.TextColor3 = Color3.fromRGB(255, 255, 255)
+Label.TextColor3 = Color3.fromRGB(0, 0, 0)
 Label.TextScaled = true
 Label.TextWrapped = true
 
@@ -70,6 +70,9 @@ Open.TextWrapped = true
 local lastSpeed = 16
 
 game.Players.LocalPlayer.CharacterAdded:Connect(function(character)
+    local player = game.Players.LocalPlayer
+    local storedSpeed = player:GetAttribute("SavedWalkSpeed") or lastSpeed
+    player:SetAttribute("SavedWalkSpeed", storedSpeed)
     local humanoid = character:WaitForChild("Humanoid")
     humanoid.WalkSpeed = lastSpeed
 end)
@@ -83,16 +86,8 @@ SpeedInput.FocusLost:Connect(function(enterPressed)
             local humanoid = character:FindFirstChildOfClass("Humanoid")
             if humanoid then
                 humanoid.WalkSpeed = math.max(0, speed)
+                player:SetAttribute("SavedWalkSpeed", humanoid.WalkSpeed)
                 lastSpeed = humanoid.WalkSpeed
-            end
-        end
-    end
-        if speed then
-            local player = game.Players.LocalPlayer
-            local character = player.Character or player.CharacterAdded:Wait()
-            local humanoid = character:FindFirstChildOfClass("Humanoid")
-            if humanoid then
-                humanoid.WalkSpeed = math.max(0, speed)
             end
         end
     end
