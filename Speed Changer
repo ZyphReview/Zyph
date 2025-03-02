@@ -139,7 +139,8 @@ Close.MouseButton1Click:Connect(function()
         wait(5)
         HiddenText:Destroy()
     end)
-end
+end)
+end)
 
 local UserInputService = game:GetService("UserInputService")
 UserInputService.InputBegan:Connect(function(input, gameProcessed)
