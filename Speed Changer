@@ -29,8 +29,7 @@ spawn(function()
         LoadedText.Visible = i % 2 == 0
         end
     end
-    LoadedText:Destroy()
-end)
+    LoadedText:Destroy(end))
 
 Frame.Parent = ScreenGui
 Frame.BackgroundColor3 = Color3.fromRGB(148, 85, 27)
@@ -124,23 +123,9 @@ Close.MouseButton1Click:Connect(function()
     if not Frame or not Open then return end
     Frame.Visible = false
     Open.Visible = true
-    
-    local HiddenText = Instance.new("TextLabel", ScreenGui)
-    HiddenText.Size = UDim2.new(0, 300, 0, 30)
-    HiddenText.Position = UDim2.new(1, -320, 1, -40)
-    HiddenText.BackgroundTransparency = 1
-    HiddenText.Font = Enum.Font.SourceSansBold
-    HiddenText.Text = "UI Hidden. Reopen with K"
-    HiddenText.TextScaled = true
-    HiddenText.TextWrapped = true
-    HiddenText.TextColor3 = Color3.fromRGB(255, 255, 255)
-    
-    spawn(function()
-        wait(5)
-        HiddenText:Destroy()
-    end)
-end)
-end)
+
+    if not Frame or not Open then return end
+)
 end
 
 local UserInputService = game:GetService("UserInputService")
@@ -149,24 +134,12 @@ UserInputService.InputBegan:Connect(function(input, gameProcessed)
         Frame.Visible = not Frame.Visible
         Open.Visible = not Frame.Visible
     end
+    if input.KeyCode == Enum.KeyCode.K and not gameProcessed then
+        Frame.Visible = not Frame.Visible
+        Open.Visible = not Frame.Visible
+    end
 end)
-    Frame.Visible = false
-    Open.Visible = true
-    
-    local HiddenText = Instance.new("TextLabel", ScreenGui)
-    HiddenText.Size = UDim2.new(0, 300, 0, 30)
-    HiddenText.Position = UDim2.new(1, -320, 1, -40)
-    HiddenText.BackgroundTransparency = 1
-    HiddenText.Font = Enum.Font.SourceSansBold
-    HiddenText.Text = "UI Hidden. Reopen with K"
-    HiddenText.TextScaled = true
-    HiddenText.TextWrapped = true
-    HiddenText.TextColor3 = Color3.fromRGB(255, 255, 255)
-    
-    spawn(function()
-        wait(5)
-        HiddenText:Destroy()
-    end)
+    )
 end
     Frame.Visible = false
     Open.Visible = true
@@ -176,4 +149,3 @@ Open.MouseButton1Click:Connect(function()
     Open.Visible = false
     Frame.Visible = true
 end)
-
