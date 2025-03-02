@@ -8,27 +8,32 @@ local Open = Instance.new("TextButton")
 
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
+local LoadedMessageShown = false -- Prevents reloading message
 
 ScreenGui.Parent = game.CoreGui
 ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
-local LoadedText = Instance.new("TextLabel", ScreenGui)
-LoadedText.Size = UDim2.new(0, 300, 0, 30)
-LoadedText.Position = UDim2.new(0.5, -150, 1, -40)
-LoadedText.BackgroundTransparency = 1
-LoadedText.Font = Enum.Font.SourceSansBold
-LoadedText.Text = "Speed Changer Loaded"
-LoadedText.TextScaled = true
-LoadedText.TextWrapped = true
-LoadedText.TextColor3 = Color3.fromRGB(255, 0, 0)
+if not LoadedMessageShown then
+    local LoadedText = Instance.new("TextLabel", ScreenGui)
+    LoadedText.Size = UDim2.new(0, 300, 0, 30)
+    LoadedText.Position = UDim2.new(0.5, -150, 1, -40)
+    LoadedText.BackgroundTransparency = 1
+    LoadedText.Font = Enum.Font.SourceSansBold
+    LoadedText.Text = "Speed Changer Loaded"
+    LoadedText.TextScaled = true
+    LoadedText.TextWrapped = true
+    LoadedText.TextColor3 = Color3.fromRGB(255, 0, 0)
 
-task.spawn(function()
-    for hue = 0, 360, 10 do
-        LoadedText.TextColor3 = Color3.fromHSV(hue / 360, 1, 1)
-        task.wait(0.1)
-    end
-    LoadedText:Destroy()
-end)
+    task.spawn(function()
+        for hue = 0, 360, 10 do
+            LoadedText.TextColor3 = Color3.fromHSV(hue / 360, 1, 1)
+            task.wait(0.1)
+        end
+        LoadedText:Destroy()
+    end)
+
+    LoadedMessageShown = true
+end
 
 Frame.Parent = ScreenGui
 Frame.BackgroundColor3 = Color3.fromRGB(148, 85, 27)
@@ -125,4 +130,3 @@ Open.MouseButton1Click:Connect(function()
     Open.Visible = false
     Frame.Visible = true
 end)
-
