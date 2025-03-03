@@ -1,0 +1,105 @@
+--[[
+    Simplified Fluent UI Loader
+    Version: 1.1.0
+
+    This module creates a basic ScreenGui with a window and supports theme setting and notifications.
+--]]
+
+local function initializeFluentUI()
+    -- Services
+    local RunService       = game:GetService("RunService")
+    local Players          = game:GetService("Players")
+    local TweenService     = game:GetService("TweenService")
+    local Workspace        = game:GetService("Workspace")
+    
+    local LocalPlayer = Players.LocalPlayer
+    local Camera      = Workspace.CurrentCamera
+
+    -- Create a ScreenGui
+    local screenGui = Instance.new("ScreenGui")
+    screenGui.Name = "FluentUI"
+    if RunService:IsStudio() then
+        screenGui.Parent = LocalPlayer:WaitForChild("PlayerGui")
+    else
+        screenGui.Parent = game:GetService("CoreGui")
+    end
+
+    -- Optionally protect the GUI (if using Synapse or Xeno)
+    if syn and syn.protect_gui then
+        syn.protect_gui(screenGui)
+    end
+
+    -- Define the Fluent UI table
+    local Fluent = {
+        Version      = "1.1.0",
+        Theme        = "Dark",
+        GUI          = screenGui,
+        Window       = nil,
+    }
+
+    function Fluent:SafeCallback(callback, ...)
+        if not callback then return end
+        local success, err = pcall(callback, ...)
+        if not success then
+            self:Notify({
+                Title = "Interface",
+                Content = "Callback error",
+                SubContent = err,
+                Duration = 5,
+            })
+        end
+    end
+
+    function Fluent:Notify(config)
+        local notify = Instance.new("TextLabel")
+        notify.Name = "Notification"
+        notify.Text = config.Title .. ": " .. config.Content
+        notify.Size = UDim2.new(0, 250, 0, 50)
+        notify.Position = UDim2.new(0.5, -125, 0.1, 0)
+        notify.BackgroundTransparency = 0.5
+        notify.TextColor3 = Color3.new(1, 1, 1)
+        notify.Parent = self.GUI
+        delay(config.Duration or 5, function() notify:Destroy() end)
+        return notify
+    end
+
+    function Fluent:CreateWindow(config)
+        assert(config.Title, "Window - Missing Title")
+        if self.Window then
+            warn("You cannot create more than one window.")
+            return
+        end
+
+        local window = Instance.new("Frame")
+        window.Name = "FluentWindow"
+        window.Size = config.Size or UDim2.new(0, 400, 0, 300)
+        window.Position = config.Position or UDim2.new(0.5, -200, 0.5, -150)
+        window.BackgroundColor3 = Color3.new(0.15, 0.15, 0.15)
+        window.BorderSizePixel = 0
+        window.Parent = self.GUI
+
+        self.Window = window
+        self:SetTheme(config.Theme or "Dark")
+        return window
+    end
+
+    function Fluent:SetTheme(theme)
+        if self.Window then
+            self.Theme = theme
+            print("Theme set to:", theme)
+        end
+    end
+
+    function Fluent:Destroy()
+        if self.Window then
+            if self.GUI then self.GUI:Destroy() end
+            self.Window = nil
+        end
+    end
+
+    return Fluent
+end
+
+-- Initialize and return the Fluent UI library
+local UI = initializeFluentUI()
+return UI
